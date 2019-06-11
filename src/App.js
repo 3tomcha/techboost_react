@@ -7,15 +7,35 @@ class App extends Component{
     super(props);
     this.state = {
       todos: [
-        {id: 1, text: "dataを表示する"},
-        {id: 2, text: "簡単な構成を知る"}
+        {text: "dataを表示する"},
+        {text: "簡単な構成を知る"}
       ]
     };
   }
+
+  handleInput = (e) => {
+    this.setState({
+      newtodos: {text: e.target.value}
+    });
+    console.log(this.state.newtodos);
+  }
+
+  insertTodo = () => {
+    const temp = this.state.todos;
+    temp.push(this.state.newtodos);
+    this.setState({
+      todos: temp
+    });
+  };
+
   render(){
     return(
       <div class="App">
-        {this.state.todos.map(item => <li>{item.text}</li>)}
+      <ul>
+      {this.state.todos.map(item => <li>{item.text}</li>)}
+      </ul>
+      <input type="text" id="todo" onChange={this.handleInput}/>
+      <button onClick={this.insertTodo}>更新する</button>
       </div>
     );
   }
