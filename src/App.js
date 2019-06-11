@@ -3,15 +3,23 @@ import logo from './logo.svg';
 import './App.css';
 
 function Todo(props){
-  return <li>{props.key}{props.text}</li>;
+  return (
+    <li>
+      <input type="checkbox" onChange={props.onChange}/>
+      {props.key}{props.text}
+    </li>
+  );
 }
 
-function Todos(props){
+class Todos extends Component{
+  render(){
   return(
     <ul>
-    {props.todos.map(item => <Todo key={item.id} text={item.text}/>)}
+    {this.props.todos.map(item =>
+       <Todo key={item.id} text={item.text} onChange={()=>this.props.onChange(item.id)} />)}
     </ul>
   );
+  }
 }
 
 class App extends Component{
@@ -23,7 +31,8 @@ class App extends Component{
 
       this.state = {
         todos: todos,
-        countTodo: todos.length
+        countTodo: todos.length,
+        leftTodo: todos.length,
       };
     }
 
@@ -53,10 +62,18 @@ class App extends Component{
       });
     };
 
+    onChangeControl = i => {
+      console.log(i);
+      this.setState({
+        leftTodo: i,
+      });
+    }
+
     render(){
       return(
         <div class="App">
-        <Todos todos={this.state.todos} />
+        <h1>My Todos(2/{this.state.leftTodo})</h1>
+        <Todos todos={this.state.todos} onChange={(i)=>this.onChangeControl(i)}/>
         <input type="text" id="todo" onChange={this.handleInput}/>
         <button onClick={this.insertTodo}>更新する</button>
         <button onClick={this.deleteTodo}>削除する</button>
